@@ -1,0 +1,5 @@
+require('hobbes.set')
+require('hobbes.lazy')
+require('hobbes.remap')
+require('hobbes.filetype')
+--require('hobbes.projects')
