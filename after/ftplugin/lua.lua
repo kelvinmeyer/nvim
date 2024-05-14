@@ -1,1 +1,0 @@
-print("lua file detected")
