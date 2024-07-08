@@ -939,26 +939,19 @@ require("lazy").setup({
 			-- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 		},
 	},
-	{
-		dir = "/Users/hobbes/nvimPlugins/waterloo.nvim",
-		opts = {},
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-	},
-	{
-		"nvim-orgmode/orgmode",
-		event = "VeryLazy",
-		ft = { "org" },
-		config = function()
-			-- Setup orgmode
-			require("orgmode").setup({
-				org_agenda_files = "~/orgfiles/**/*",
-				org_default_notes_file = "~/orgfiles/refile.org",
-			})
-		end,
-	},
-
+  {
+    "tpope/vim-fugitive",
+    keys = {
+      {"<Leader>gg", "<cmd>Git<CR>", desc = "git status"},
+      {"<Leader>gs", "<cmd>Git status<CR>", desc = "git status explicit"},
+      {"<Leader>gc", "<cmd>Git commit | startinsert<CR>", desc = "git commit"},
+      {"<Leader>ga", "<cmd>Git add .<CR>", desc = "git add"},
+      {"<Leader>gp", "<cmd>Git push<CR>", desc = "git push"},
+      {"<Leader>gP", "<cmd>Git pull<CR>", desc = "git pull"},
+      {"<Leader>gf", "<cmd>Git fetch<CR>", desc = "git fetch"}
+      --{"<Leader>gb", "<cmd>Git fetch<CR>", desc = "git branch"}
+    }
+  }
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
 	-- init.lua. If you want these files, they are in the repository, so you can just download them and
 	-- place them in the correct locations.
