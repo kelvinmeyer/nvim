@@ -108,7 +108,7 @@ vim.opt.showmode = false
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.opt.clipboard = "unnamedplus"
+-- vim.opt.clipboard = "unnamedplus"
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -148,6 +148,17 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 5
+
+-- open the file explorer
+vim.keymap.set("n", "<Leader>e", vim.cmd.Ex)
+vim.keymap.set("n", "Q", "<nop>")
+
+vim.keymap.set("n", "<Leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
+-- my remaps
+vim.keymap.set("n", "<Leader>v", vim.cmd.vsplit)
+vim.keymap.set("n", "<Leader>h", vim.cmd.split)
+
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -362,6 +373,12 @@ require("lazy").setup({
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
 		branch = "0.1.x",
+    keys = {
+      {'<Leader>fg', "<cmd>Telescope live_grep<cr>", desc = "Live grep"},
+      {'<Leader>ff', "<cmd>Telescope find_files<cr>", desc = "Find file"},
+      {'<Leader>fb', "<cmd>Telescope buffers<cr>", desc = "Find file"},
+      {'<Leader>fh', "<cmd>Telescope help_tags<cr>", desc = "Find file"},
+    },
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -690,14 +707,6 @@ require("lazy").setup({
 		lazy = false,
 		keys = {
 			{
-				"<leader>f",
-				function()
-					require("conform").format({ async = true, lsp_fallback = true })
-				end,
-				mode = "",
-				desc = "[F]ormat buffer",
-			},
-			{
 				"<leader>=",
 				function()
 					require("conform").format({ async = true, lsp_fallback = true })
@@ -949,9 +958,12 @@ require("lazy").setup({
       {"<Leader>gp", "<cmd>Git push<CR>", desc = "git push"},
       {"<Leader>gP", "<cmd>Git pull<CR>", desc = "git pull"},
       {"<Leader>gf", "<cmd>Git fetch<CR>", desc = "git fetch"}
-      --{"<Leader>gb", "<cmd>Git fetch<CR>", desc = "git branch"}
     }
-  }
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+  },
+
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
 	-- init.lua. If you want these files, they are in the repository, so you can just download them and
 	-- place them in the correct locations.
