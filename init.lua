@@ -159,13 +159,21 @@ vim.keymap.set("n", "<Leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 vim.keymap.set("n", "<Leader>v", vim.cmd.vsplit)
 vim.keymap.set("n", "<Leader>h", vim.cmd.split)
 
-
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+-- add folding via treesitter from https://www.jackfranklin.co.uk/blog/code-folding-in-vim-neovim/
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldcolumn = "0"
+vim.opt.foldtext = ""
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 1
+vim.opt.foldnestmax = 4
 
 -- Diagnostic keymaps
 -- TODO: the next 2 are for jumping between lsp errors!!!
@@ -373,12 +381,12 @@ require("lazy").setup({
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
 		branch = "0.1.x",
-    keys = {
-      {'<Leader>fg', "<cmd>Telescope live_grep<cr>", desc = "Live grep"},
-      {'<Leader>ff', "<cmd>Telescope find_files<cr>", desc = "Find file"},
-      {'<Leader>fb', "<cmd>Telescope buffers<cr>", desc = "Find file"},
-      {'<Leader>fh', "<cmd>Telescope help_tags<cr>", desc = "Find file"},
-    },
+		keys = {
+			{ "<Leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
+			{ "<Leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find file" },
+			{ "<Leader>fb", "<cmd>Telescope buffers<cr>", desc = "Find file" },
+			{ "<Leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Find file" },
+		},
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -652,7 +660,7 @@ require("lazy").setup({
 				--    https://github.com/pmizio/typescript-tools.nvim
 				--
 				-- But for many setups, the LSP (`tsserver`) will work just fine
-				-- tsserver = {},
+				tsserver = {},
 				--
 
 				lua_ls = {
@@ -780,6 +788,7 @@ require("lazy").setup({
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
 			luasnip.config.setup({})
+			require("luasnip.loaders.from_lua").lazy_load({ paths = vim.fn.stdpath("config") .. "/snippets" })
 
 			cmp.setup({
 				snippet = {
@@ -948,21 +957,24 @@ require("lazy").setup({
 			-- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 		},
 	},
-  {
-    "tpope/vim-fugitive",
-    keys = {
-      {"<Leader>gg", "<cmd>Git<CR>", desc = "git status"},
-      {"<Leader>gs", "<cmd>Git status<CR>", desc = "git status explicit"},
-      {"<Leader>gc", "<cmd>Git commit | startinsert<CR>", desc = "git commit"},
-      {"<Leader>ga", "<cmd>Git add .<CR>", desc = "git add"},
-      {"<Leader>gp", "<cmd>Git push<CR>", desc = "git push"},
-      {"<Leader>gP", "<cmd>Git pull<CR>", desc = "git pull"},
-      {"<Leader>gf", "<cmd>Git fetch<CR>", desc = "git fetch"}
-    }
-  },
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-  },
+	{
+		"tpope/vim-fugitive",
+		keys = {
+			{ "<Leader>gg", "<cmd>Git<CR>", desc = "git status" },
+			{ "<Leader>gs", "<cmd>Git status<CR>", desc = "git status explicit" },
+			{ "<Leader>gc", "<cmd>Git commit | startinsert<CR>", desc = "git commit" },
+			{ "<Leader>ga", "<cmd>Git add .<CR>", desc = "git add" },
+			{ "<Leader>gp", "<cmd>Git push<CR>", desc = "git push" },
+			{ "<Leader>gP", "<cmd>Git pull<CR>", desc = "git pull" },
+			{ "<Leader>gf", "<cmd>Git fetch<CR>", desc = "git fetch" },
+		},
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+	},
+	{
+		"christoomey/vim-tmux-navigator",
+	},
 
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
 	-- init.lua. If you want these files, they are in the repository, so you can just download them and
