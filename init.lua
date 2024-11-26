@@ -84,6 +84,16 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+local function SaveBuffer()
+	-- Check if the current buffer is modifiable and can be written
+	if vim.bo.modifiable and vim.bo.buftype == "" then
+		-- Save the current buffer if it has been modified
+		if vim.bo.modified then
+			vim.cmd.write()
+		end
+	end
+end
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
@@ -202,6 +212,7 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 
 -- My keymaps
 vim.keymap.set("n", "<Leader>e", function()
+	SaveBuffer()
 	local dir = vim.cmd.pwd()
 	vim.cmd("Explore" .. dir)
 end)
@@ -471,14 +482,23 @@ require("lazy").setup({
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
+			vim.keymap.set("n", "<leader>sf", function()
+				SaveBuffer()
+				builtin.find_files()
+			end, { desc = "[S]earch [F]iles" })
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
+			vim.keymap.set("n", "<leader>q", function()
+				SaveBuffer()
+				builtin.diagnostics()
+			end, { desc = "[S]earch [D]iagnostics" })
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+			vim.keymap.set("n", "<leader><leader>", function()
+				SaveBuffer()
+				builtin.buffers()
+			end, { desc = "[ ] Find existing buffers" })
 
 			-- Slightly advanced example of overriding default behavior and theme
 			vim.keymap.set("n", "<leader>/", function()
